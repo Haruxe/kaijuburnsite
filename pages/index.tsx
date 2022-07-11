@@ -6,19 +6,10 @@ import logo from "../assets/kaijukingz_logo.webp";
 import coffee from "../assets/coffee.png";
 import haruxe from "../assets/haruxe.gif";
 import { useEffect, useState } from "react";
-import { Fire, FireAlt } from "styled-icons/fa-solid";
-import {
-  LeftArrowAlt,
-  LeftArrowSquare,
-  RightArrowAlt,
-  RightArrowSquare,
-} from "styled-icons/boxicons-solid";
-import {
-  ChevronsLeft,
-  ChevronsRight,
-  LeftArrowCircle,
-} from "styled-icons/boxicons-regular";
-import { HandLeft } from "styled-icons/ionicons-sharp";
+import { FireAlt } from "styled-icons/fa-solid";
+import { ChevronsLeft, ChevronsRight } from "styled-icons/boxicons-regular";
+import trainImage from "../assets/scientists.png";
+import { url } from "inspector";
 
 const Home: NextPage = () => {
   const [logs, setLogs] = useState([]);
@@ -60,7 +51,19 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div className="bg-black h-screen">
+    <div
+      className="bg-black h-screen"
+      style={{
+        backgroundImage: `url(
+          "https://kaijukingz.io/static/media/Bottom%20Floor.f24a049c.gif"
+        )`,
+        backgroundSize: "cover",
+        backgroundRepeat: "repeat-x",
+        backgroundPosition: "center",
+        boxShadow: "inset 0 0 100em #000000",
+        backgroundColor: "#000000",
+      }}
+    >
       <div className="max-w-[1300px] mx-auto">
         <div className="w-full flex place-content-center">
           <div className="h-[80px] p-5 text-white text-lg flex align-middle font-kingz place-content-start fixed top-0 xl:w-[1300px] w-full z-10">
@@ -68,14 +71,15 @@ const Home: NextPage = () => {
           </div>
         </div>
         <div className="p-5 mt-[80px] text-white text-xl font-kingz space-y-5 mx-auto place-content-center">
-          <h1 className="mx-auto text-center text-2xl">
-            <FireAlt className="w-4 mr-2" /> dna burnt: {burnt ? burnt : "-"}
-          </h1>
+          <div className="mx-auto text-center text-2xl place-content-center flex flex-row">
+            <FireAlt className="w-4 mr-2" />{" "}
+            <h1 className="text-3xl">dna burnt: {burnt ? burnt : "-"}</h1>
+          </div>
           <ul className="space-y-5 flex flex-col">
             {logs &&
               logs.map((e) => {
                 return (
-                  <li className="bg-[#92929228] flex space-x-3 p-4 mx-auto rounded-sm">
+                  <li className="bg-[#000000b0]  flex space-x-3 p-4 mx-auto rounded-sm">
                     <div className="relative">
                       <div className="w-[80px] h-[80px]">
                         <div>
@@ -121,7 +125,7 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="place-content-center flex">
-        <div className=" flex flex-row text-white font-kingz xl:w-[1300px] w-full fixed bottom-0 px-5 bg-black">
+        <div className=" flex flex-row text-white font-kingz xl:w-[1300px] w-full fixed bottom-0 px-5">
           <h1 className="my-auto ml-10 mr-5">Created by:</h1>
           <a href="https://twitter.com/haruxeETH" target={"_blank"}>
             <Image
