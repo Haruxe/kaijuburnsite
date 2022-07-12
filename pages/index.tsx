@@ -10,7 +10,7 @@ import { FireAlt } from "styled-icons/fa-solid";
 import { ChevronsLeft, ChevronsRight } from "styled-icons/boxicons-regular";
 
 const Home: NextPage = () => {
-  const [logs, setLogs] = useState([]);
+  const [logs, setLogs] = useState<any[]>([]);
   const [burnt, setBurnt] = useState();
   const [page, setPage] = useState(0);
 
@@ -95,8 +95,8 @@ const Home: NextPage = () => {
                       <h1 className="">Burnt 1 Day ago</h1>
                       <p>
                         by{" "}
-                        <a href={"https://etherscan.io/address/" + e.address}>
-                          {e.address}
+                        <a href={"https://etherscan.io/address/" + e?.address}>
+                          {e?.address}
                         </a>
                       </p>
                     </div>
