@@ -1,13 +1,15 @@
 import type { NextPage } from "next";
 import Image from "next/image";
-import fire from "../public/Fire.gif";
+import fire from "../public/fire.gif";
 import logo from "../public/kaijukingz_logo.webp";
 import coffee from "../public/coffee.png";
 import haruxe from "../public/haruxe.gif";
 import { useEffect, useState } from "react";
-import { FireAlt } from "styled-icons/fa-solid";
-import { ChevronsLeft, ChevronsRight } from "styled-icons/boxicons-regular";
-import { Fire } from "styled-icons/remix-line";
+import {
+  ChevronsLeft,
+  ChevronsRight,
+  Dna,
+} from "styled-icons/boxicons-regular";
 import { LocalFireDepartment } from "styled-icons/material";
 
 const Home: NextPage = () => {
@@ -19,7 +21,6 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     getInfo();
-    setDisplayed(logs.slice(page * 7, page * 7 + 7));
   }, []);
 
   useEffect(() => {
@@ -55,6 +56,7 @@ const Home: NextPage = () => {
     setLogs(epicResult.data.get_epic_burned);
     setBurnt(epicResult.data.get_epic_burned.length);
     setPages(Math.ceil(epicResult.data.get_epic_burned.length / 7));
+    setDisplayed(epicResult.data.get_epic_burned.slice(page * 7, page * 7 + 7));
   }
 
   return (
@@ -71,17 +73,22 @@ const Home: NextPage = () => {
         backgroundPositionY: "80px",
       }}
     >
-      <div className="max-w-[1300px] mx-auto">
+      <div className="mx-auto">
         <div className="flex place-content-center h-[80px] bg-black">
-          <div className="p-5 text-white text-lg flex align-middle font-kingz place-content-start fixed top-0 xl:w-[1300px] w-full z-10">
+          <div className="p-4 text-white text-lg flex align-middle font-kingz place-content-start fixed top-0 w-screen z-10 bg-black ">
             <Image src={logo} height="50px" width="200px" alt="kaijuKingz" />
           </div>
         </div>
-        <div className="p-5 mt-[80px] text-white text-xl font-kingz space-y-5 mx-auto place-content-center">
+        <div className="p-5 text-white text-lg font-kingz space-y-5 mx-auto place-content-center mb-[80px]">
           <div className="mx-auto text-center text-2xl place-content-center flex flex-row ">
             <div className="bg-[#000000b0] flex flex-row px-3 py-1 align-middle place-content-center">
               <LocalFireDepartment className="w-5 mr-2" />{" "}
               <h1>dna burnt: {burnt ? burnt : "-"}</h1>
+            </div>
+          </div>
+          <div className="mx-auto text-center text-2xl place-content-center flex flex-row ">
+            <div className="bg-[#000000b0] flex flex-row px-3 py-1 align-middle place-content-center">
+              <h1>The kaijuz are hungry for more...</h1>
             </div>
           </div>
           <ul className="space-y-5 flex flex-col">
@@ -103,8 +110,14 @@ const Home: NextPage = () => {
                             layout="fill"
                           />
                         </div>
-                        <div className="absolute top-0 opacity-50">
-                          <Image src={fire} alt="fire" />
+                        <div className="absolute top-0 opacity-20">
+                          <Image
+                            src={fire}
+                            alt="fire"
+                            width="100px"
+                            height="100px"
+                            className="rounded-sm"
+                          />
                         </div>
                       </div>
                     </div>
@@ -143,7 +156,7 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="place-content-center flex">
-        <div className=" flex flex-row text-white font-kingz xl:w-[1300px] w-full fixed bottom-0 p-2 ">
+        <div className=" flex flex-row text-white font-kingz w-screen bg-black fixed bottom-0 p-2 ">
           <h1 className="my-auto ml-10 mr-5">Created by</h1>
           <a
             href="https://twitter.com/haruxeETH"
