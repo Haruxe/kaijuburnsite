@@ -11,7 +11,7 @@ import { ChevronsLeft, ChevronsRight } from "styled-icons/boxicons-regular";
 
 const Home: NextPage = () => {
   const [logs, setLogs] = useState<any[]>([]);
-  const [burnt, setBurnt] = useState();
+  const [burnt, setBurnt] = useState(0);
   const [page, setPage] = useState(0);
 
   useEffect(() => {
