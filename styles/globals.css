@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "KaijuKingz";
+  font-family: KaijuKingz;
   src: "/KaijuKingz.5c7a5ce9.woff" format("woff");
 }
 
 .font-kingz {
-  font-family: "KaijuKingz";
+  font-family: KaijuKingz;
 }
