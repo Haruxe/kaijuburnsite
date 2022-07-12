@@ -1,25 +1,32 @@
 import type { NextPage } from "next";
 import Image from "next/image";
-import demo from "../assets/demo.gif";
-import fire from "../assets/Fire.gif";
-import logo from "../assets/kaijukingz_logo.webp";
-import coffee from "../assets/coffee.png";
-import haruxe from "../assets/haruxe.gif";
+import fire from "../public/Fire.gif";
+import logo from "../public/kaijukingz_logo.webp";
+import coffee from "../public/coffee.png";
+import haruxe from "../public/haruxe.gif";
 import { useEffect, useState } from "react";
 import { FireAlt } from "styled-icons/fa-solid";
 import { ChevronsLeft, ChevronsRight } from "styled-icons/boxicons-regular";
+import { Fire } from "styled-icons/remix-line";
+import { LocalFireDepartment } from "styled-icons/material";
 
 const Home: NextPage = () => {
   const [logs, setLogs] = useState<any[]>([]);
   const [burnt, setBurnt] = useState(0);
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(0);
+  const [displayed, setDisplayed] = useState<any[]>([]);
 
   useEffect(() => {
-    getInfo(page * 7);
+    getInfo();
+    setDisplayed(logs.slice(page * 7, page * 7 + 7));
+  }, []);
+
+  useEffect(() => {
+    setDisplayed(logs.slice(page * 7, page * 7 + 7));
   }, [page]);
 
-  async function getInfo(startIndex: number) {
+  async function getInfo() {
     const epicResult = await fetch("https://dna.0day.love/graphql", {
       method: "POST",
       headers: {
@@ -45,14 +52,14 @@ const Home: NextPage = () => {
       }),
     }).then((res) => res.json());
 
-    setLogs(epicResult.data.get_epic_burned.slice(startIndex, startIndex + 7));
+    setLogs(epicResult.data.get_epic_burned);
     setBurnt(epicResult.data.get_epic_burned.length);
-    setPages(Math.ceil(burnt / 7));
+    setPages(Math.ceil(epicResult.data.get_epic_burned.length / 7));
   }
 
   return (
     <div
-      className="bg-black h-screen"
+      className="bg-black h-[1300px]"
       style={{
         backgroundImage: `url(
           "https://kaijukingz.io/static/media/Bottom%20Floor.f24a049c.gif"
@@ -61,32 +68,40 @@ const Home: NextPage = () => {
         backgroundRepeat: "repeat-x",
         backgroundPosition: "center",
         boxShadow: "inset 0 0 100em #000000",
-        backgroundColor: "#000000",
+        backgroundPositionY: "80px",
       }}
     >
       <div className="max-w-[1300px] mx-auto">
-        <div className="w-full flex place-content-center">
-          <div className="h-[80px] p-5 text-white text-lg flex align-middle font-kingz place-content-start fixed top-0 xl:w-[1300px] w-full z-10">
-            <Image src={logo} width="150px" alt="kaijuKingz" />
+        <div className="flex place-content-center h-[80px] bg-black">
+          <div className="p-5 text-white text-lg flex align-middle font-kingz place-content-start fixed top-0 xl:w-[1300px] w-full z-10">
+            <Image src={logo} height="50px" width="200px" alt="kaijuKingz" />
           </div>
         </div>
         <div className="p-5 mt-[80px] text-white text-xl font-kingz space-y-5 mx-auto place-content-center">
-          <div className="mx-auto text-center text-2xl place-content-center flex flex-row">
-            <FireAlt className="w-4 mr-2" />{" "}
-            <h1 className="text-3xl">dna burnt: {burnt ? burnt : "-"}</h1>
+          <div className="mx-auto text-center text-2xl place-content-center flex flex-row ">
+            <div className="bg-[#000000b0] flex flex-row px-3 py-1 align-middle place-content-center">
+              <LocalFireDepartment className="w-5 mr-2" />{" "}
+              <h1>dna burnt: {burnt ? burnt : "-"}</h1>
+            </div>
           </div>
           <ul className="space-y-5 flex flex-col">
-            {logs &&
-              logs.map((e, index) => {
+            {displayed &&
+              displayed.map((e, index) => {
+                let imgLocation = "/dna/dna" + e.id + ".gif";
                 return (
                   <li
                     className="bg-[#000000b0]  flex space-x-3 p-4 mx-auto rounded-sm"
                     key={index}
                   >
                     <div className="relative">
-                      <div className="w-[80px] h-[80px]">
+                      <div className="w-[80px] h-[80px] relative">
                         <div>
-                          <Image src={demo} className="rounded-sm" alt="dna" />
+                          <Image
+                            src={imgLocation}
+                            className="rounded-sm"
+                            alt="dna"
+                            layout="fill"
+                          />
                         </div>
                         <div className="absolute top-0 opacity-50">
                           <Image src={fire} alt="fire" />
@@ -128,8 +143,8 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="place-content-center flex">
-        <div className=" flex flex-row text-white font-kingz xl:w-[1300px] w-full fixed bottom-0 px-5">
-          <h1 className="my-auto ml-10 mr-5">Created by:</h1>
+        <div className=" flex flex-row text-white font-kingz xl:w-[1300px] w-full fixed bottom-0 p-2 ">
+          <h1 className="my-auto ml-10 mr-5">Created by</h1>
           <a
             href="https://twitter.com/haruxeETH"
             target={"_blank"}
