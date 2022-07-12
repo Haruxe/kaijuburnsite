@@ -57,6 +57,7 @@ const Home: NextPage = () => {
       setPages(Math.ceil(result.data.get_all_burned.length / 7));
       setDisplayed(result.data.get_all_burned.slice(page * 7, page * 7 + 7));
       setPage(0);
+      setBurnt(result.data.get_all_burned.length);
     } else if (toggleMode == 1) {
       //toggle epic rarities to display
       result = await fetch("https://dna.0day.love/graphql", {
@@ -86,6 +87,7 @@ const Home: NextPage = () => {
       setLogs(result.data.get_epic_burned);
       setPages(Math.ceil(result.data.get_epic_burned.length / 7));
       setDisplayed(result.data.get_epic_burned.slice(page * 7, page * 7 + 7));
+      setBurnt(result.data.get_epic_burned.length);
       setPage(0);
     } else {
       //toggle other rarities to display
@@ -117,6 +119,7 @@ const Home: NextPage = () => {
       setPages(Math.ceil(result.data.get_other_burned.length / 7));
       setDisplayed(result.data.get_other_burned.slice(page * 7, page * 7 + 7));
       setPage(0);
+      setBurnt(result.data.get_other_burned.length);
     }
   }
 
