@@ -13,6 +13,7 @@ const Home: NextPage = () => {
   const [logs, setLogs] = useState<any[]>([]);
   const [burnt, setBurnt] = useState(0);
   const [page, setPage] = useState(0);
+  const [pages, setPages] = useState(0);
 
   useEffect(() => {
     getInfo(page * 7);
@@ -46,6 +47,7 @@ const Home: NextPage = () => {
 
     setLogs(epicResult.data.get_epic_burned.slice(startIndex, startIndex + 7));
     setBurnt(epicResult.data.get_epic_burned.length);
+    setPages(Math.ceil(burnt / 7));
   }
 
   return (
@@ -112,12 +114,12 @@ const Home: NextPage = () => {
                   }}
                 />
                 <h1 className="my-auto">
-                  Page {page + 1} of {Math.ceil(burnt / 7)}
+                  Page {page + 1} of {pages}
                 </h1>
                 <ChevronsRight
                   className="w-10 cursor-pointer"
                   onClick={() => {
-                    if (page != Math.ceil(burnt / 7) - 1) setPage(page + 1);
+                    if (page != pages - 1) setPage(page + 1);
                   }}
                 />
               </div>
