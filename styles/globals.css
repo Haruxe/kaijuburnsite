@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: KaijuKingz;
-  src: "/KaijuKingz.5c7a5ce9.woff" format("woff");
+  src: url("/KaijuKingz.woff") format("woff");
 }
 
 .font-kingz {
