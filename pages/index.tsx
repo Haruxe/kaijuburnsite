@@ -8,8 +8,6 @@ import haruxe from "../assets/haruxe.gif";
 import { useEffect, useState } from "react";
 import { FireAlt } from "styled-icons/fa-solid";
 import { ChevronsLeft, ChevronsRight } from "styled-icons/boxicons-regular";
-import trainImage from "../assets/scientists.png";
-import { url } from "inspector";
 
 const Home: NextPage = () => {
   const [logs, setLogs] = useState([]);
@@ -20,7 +18,7 @@ const Home: NextPage = () => {
     getInfo(page * 7);
   }, [page]);
 
-  async function getInfo(startIndex) {
+  async function getInfo(startIndex: number) {
     const epicResult = await fetch("https://dna.0day.love/graphql", {
       method: "POST",
       headers: {
@@ -67,7 +65,7 @@ const Home: NextPage = () => {
       <div className="max-w-[1300px] mx-auto">
         <div className="w-full flex place-content-center">
           <div className="h-[80px] p-5 text-white text-lg flex align-middle font-kingz place-content-start fixed top-0 xl:w-[1300px] w-full z-10">
-            <Image src={logo} width="150px" />
+            <Image src={logo} width="150px" alt="kaijuKingz" />
           </div>
         </div>
         <div className="p-5 mt-[80px] text-white text-xl font-kingz space-y-5 mx-auto place-content-center">
@@ -77,16 +75,19 @@ const Home: NextPage = () => {
           </div>
           <ul className="space-y-5 flex flex-col">
             {logs &&
-              logs.map((e) => {
+              logs.map((e, index) => {
                 return (
-                  <li className="bg-[#000000b0]  flex space-x-3 p-4 mx-auto rounded-sm">
+                  <li
+                    className="bg-[#000000b0]  flex space-x-3 p-4 mx-auto rounded-sm"
+                    key={index}
+                  >
                     <div className="relative">
                       <div className="w-[80px] h-[80px]">
                         <div>
-                          <Image src={demo} className="rounded-sm" />
+                          <Image src={demo} className="rounded-sm" alt="dna" />
                         </div>
                         <div className="absolute top-0 opacity-50">
-                          <Image src={fire} />
+                          <Image src={fire} alt="fire" />
                         </div>
                       </div>
                     </div>
@@ -127,21 +128,31 @@ const Home: NextPage = () => {
       <div className="place-content-center flex">
         <div className=" flex flex-row text-white font-kingz xl:w-[1300px] w-full fixed bottom-0 px-5">
           <h1 className="my-auto ml-10 mr-5">Created by:</h1>
-          <a href="https://twitter.com/haruxeETH" target={"_blank"}>
+          <a
+            href="https://twitter.com/haruxeETH"
+            target={"_blank"}
+            rel="noreferrer"
+          >
             <Image
               src={haruxe}
               className="rounded-full "
               width="40px"
               height="40px"
+              alt="haruxe"
             />
           </a>
           <h1 className="my-auto mx-2"> + </h1>
-          <a href="https://twitter.com/erc1337_Coffee" target={"_blank"}>
+          <a
+            href="https://twitter.com/erc1337_Coffee"
+            target={"_blank"}
+            rel="noreferrer"
+          >
             <Image
               src={coffee}
               className="rounded-full"
               width="40px"
               height="40px"
+              alt="coffee"
             />
           </a>
         </div>
