@@ -18,45 +18,106 @@ const Home: NextPage = () => {
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(0);
   const [displayed, setDisplayed] = useState<any[]>([]);
+  const [toggleMode, setToggleMode] = useState(0);
 
   useEffect(() => {
     getInfo();
-  }, []);
+  }, [toggleMode]);
 
   useEffect(() => {
     setDisplayed(logs.slice(page * 7, page * 7 + 7));
   }, [page]);
 
   async function getInfo() {
-    const epicResult = await fetch("https://dna.0day.love/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: `
-      query getEpicBurned($sort_by: String, $address: String){
-        get_epic_burned(input:{sort_by:$sort_by, address:$address}){
-          id
-          address
-          amount
-          rarity
-        }
-      }
-      `,
-        variables: {
-          // LET THE USER CHANGE THIS TO 'ASC' or 'DESC' TO SORT RESULTS
-          sort_by: "DESC",
-          // LET THE USER INPUTS AN ADDRESS AND ENTER IT HERE TO FILTER RESULTS ON AN ADDRESS
-          address: "",
+    let result;
+    if (toggleMode == 0) {
+      //toggle all rarities to display
+      result = await fetch("https://dna.0day.love/graphql", {
+        credentials: "omit",
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0",
+          Accept: "application/json",
+          "Accept-Language": "en-US,en;q=0.5",
+          "Content-Type": "application/json",
+          "Sec-Fetch-Dest": "empty",
+          "Sec-Fetch-Mode": "cors",
+          "Sec-Fetch-Site": "same-origin",
+          "Sec-GPC": "1",
         },
-      }),
-    }).then((res) => res.json());
-
-    setLogs(epicResult.data.get_epic_burned);
-    setBurnt(epicResult.data.get_epic_burned.length);
-    setPages(Math.ceil(epicResult.data.get_epic_burned.length / 7));
-    setDisplayed(epicResult.data.get_epic_burned.slice(page * 7, page * 7 + 7));
+        referrer:
+          "https://dna.0day.love/graphiql?query=%7B%0A%20%20get_all_burned(input%3A%7Bsort_by%3A%22DESC%22%2C%20address%3A%22%22%7D)%7B%0A%20%20%20%20id%0A%20%20%20%20address%0A%20%20%20%20amount%0A%20%20%20%20rarity%0A%20%20%7D%0A%7D",
+        body: '{"query":"{\\n  get_all_burned(input:{sort_by:\\"DESC\\", address:\\"\\"}){\\n    id\\n    address\\n    amount\\n    rarity\\n  }\\n}","variables":null}',
+        method: "POST",
+        mode: "cors",
+      }).then((res) => res.json());
+      console.log(result);
+      debugger;
+      setLogs(result.data.get_all_burned);
+      setPages(Math.ceil(result.data.get_all_burned.length / 7));
+      setDisplayed(result.data.get_all_burned.slice(page * 7, page * 7 + 7));
+      setPage(0);
+    } else if (toggleMode == 1) {
+      //toggle epic rarities to display
+      result = await fetch("https://dna.0day.love/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+        query getEpicBurned($sort_by: String, $address: String){
+          get_epic_burned(input:{sort_by:$sort_by, address:$address}){
+            id
+            address
+            amount
+            rarity
+          }
+        }
+        `,
+          variables: {
+            // LET THE USER CHANGE THIS TO 'ASC' or 'DESC' TO SORT RESULTS
+            sort_by: "DESC",
+            // LET THE USER INPUTS AN ADDRESS AND ENTER IT HERE TO FILTER RESULTS ON AN ADDRESS
+            address: "",
+          },
+        }),
+      }).then((res) => res.json());
+      setLogs(result.data.get_epic_burned);
+      setPages(Math.ceil(result.data.get_epic_burned.length / 7));
+      setDisplayed(result.data.get_epic_burned.slice(page * 7, page * 7 + 7));
+      setPage(0);
+    } else {
+      //toggle other rarities to display
+      result = await fetch("https://dna.0day.love/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+          query getOtherBurned($sort_by: String, $address: String){
+            get_other_burned(input:{sort_by:$sort_by, address:$address}){
+              id
+              address
+              amount
+              rarity
+            }
+          }
+          `,
+          variables: {
+            // LET THE USER CHANGE THIS TO 'ASC' or 'DESC' TO SORT RESULTS
+            sort_by: "DESC",
+            // LET THE USER INPUTS AN ADDRESS AND ENTER IT HERE TO FILTER RESULTS ON AN ADDRESS
+            address: "",
+          },
+        }),
+      }).then((res) => res.json());
+      setLogs(result.data.get_other_burned);
+      setPages(Math.ceil(result.data.get_other_burned.length / 7));
+      setDisplayed(result.data.get_other_burned.slice(page * 7, page * 7 + 7));
+      setPage(0);
+    }
   }
 
   return (
@@ -89,6 +150,28 @@ const Home: NextPage = () => {
           <div className="mx-auto text-center text-2xl place-content-center flex flex-row ">
             <div className="bg-[#000000b0] flex flex-row px-3 py-1 align-middle place-content-center">
               <h1>The kaijuz are hungry for more...</h1>
+            </div>
+          </div>
+          <div className="mx-auto text-center text-2xl place-content-center flex flex-row ">
+            <div className="bg-[#000000b0] flex flex-row px-3 py-1 align-middle place-content-center space-x-5">
+              <button
+                className={toggleMode == 0 ? "text-red-600" : "text-white"}
+                onClick={() => setToggleMode(0)}
+              >
+                all
+              </button>
+              <button
+                className={toggleMode == 1 ? "text-red-600" : "text-white"}
+                onClick={() => setToggleMode(1)}
+              >
+                epic
+              </button>
+              <button
+                className={toggleMode == 2 ? "text-red-600" : "text-white"}
+                onClick={() => setToggleMode(2)}
+              >
+                others
+              </button>
             </div>
           </div>
           <ul className="space-y-5 flex flex-col">
