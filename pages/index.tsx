@@ -31,34 +31,6 @@ const Home: NextPage = () => {
   async function getInfo() {
     let result;
     if (toggleMode == 0) {
-      //toggle all rarities to display
-      result = await fetch("https://dna.0day.love/graphql", {
-        credentials: "omit",
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0",
-          Accept: "application/json",
-          "Accept-Language": "en-US,en;q=0.5",
-          "Content-Type": "application/json",
-          "Sec-Fetch-Dest": "empty",
-          "Sec-Fetch-Mode": "cors",
-          "Sec-Fetch-Site": "same-origin",
-          "Sec-GPC": "1",
-        },
-        referrer:
-          "https://dna.0day.love/graphiql?query=%7B%0A%20%20get_all_burned(input%3A%7Bsort_by%3A%22DESC%22%2C%20address%3A%22%22%7D)%7B%0A%20%20%20%20id%0A%20%20%20%20address%0A%20%20%20%20amount%0A%20%20%20%20rarity%0A%20%20%7D%0A%7D",
-        body: '{"query":"{\\n  get_all_burned(input:{sort_by:\\"DESC\\", address:\\"\\"}){\\n    id\\n    address\\n    amount\\n    rarity\\n  }\\n}","variables":null}',
-        method: "POST",
-        mode: "cors",
-      }).then((res) => res.json());
-      console.log(result);
-      debugger;
-      setLogs(result.data.get_all_burned);
-      setPages(Math.ceil(result.data.get_all_burned.length / 7));
-      setDisplayed(result.data.get_all_burned.slice(page * 7, page * 7 + 7));
-      setPage(0);
-      setBurnt(result.data.get_all_burned.length);
-    } else if (toggleMode == 1) {
       //toggle epic rarities to display
       result = await fetch("https://dna.0day.love/graphql", {
         method: "POST",
@@ -67,15 +39,17 @@ const Home: NextPage = () => {
         },
         body: JSON.stringify({
           query: `
-        query getEpicBurned($sort_by: String, $address: String){
-          get_epic_burned(input:{sort_by:$sort_by, address:$address}){
-            id
-            address
-            amount
-            rarity
-          }
-        }
-        `,
+            query getEpicBurned($sort_by: String, $address: String){
+              get_epic_burned(input:{sort_by:$sort_by, address:$address}){
+                id
+                address
+                amount
+                type
+                timestamp
+                rarity
+              }
+            }
+            `,
           variables: {
             // LET THE USER CHANGE THIS TO 'ASC' or 'DESC' TO SORT RESULTS
             sort_by: "DESC",
@@ -98,15 +72,17 @@ const Home: NextPage = () => {
         },
         body: JSON.stringify({
           query: `
-          query getOtherBurned($sort_by: String, $address: String){
-            get_other_burned(input:{sort_by:$sort_by, address:$address}){
-              id
-              address
-              amount
-              rarity
+            query getOtherBurned($sort_by: String, $address: String){
+              get_other_burned(input:{sort_by:$sort_by, address:$address}){
+                id
+                address
+                amount
+                type
+                timestamp
+                rarity
+              }
             }
-          }
-          `,
+            `,
           variables: {
             // LET THE USER CHANGE THIS TO 'ASC' or 'DESC' TO SORT RESULTS
             sort_by: "DESC",
@@ -115,6 +91,7 @@ const Home: NextPage = () => {
           },
         }),
       }).then((res) => res.json());
+      console.log(result);
       setLogs(result.data.get_other_burned);
       setPages(Math.ceil(result.data.get_other_burned.length / 7));
       setDisplayed(result.data.get_other_burned.slice(page * 7, page * 7 + 7));
@@ -161,17 +138,11 @@ const Home: NextPage = () => {
                 className={toggleMode == 0 ? "text-red-600" : "text-white"}
                 onClick={() => setToggleMode(0)}
               >
-                all
+                epic
               </button>
               <button
                 className={toggleMode == 1 ? "text-red-600" : "text-white"}
                 onClick={() => setToggleMode(1)}
-              >
-                epic
-              </button>
-              <button
-                className={toggleMode == 2 ? "text-red-600" : "text-white"}
-                onClick={() => setToggleMode(2)}
               >
                 others
               </button>
@@ -180,7 +151,7 @@ const Home: NextPage = () => {
           <ul className="space-y-5 flex flex-col">
             {displayed &&
               displayed.map((e, index) => {
-                let imgLocation = "/dna/dna" + e.id + ".gif";
+                let imgLocation = "/dna/" + e.rarity + e.type + ".gif";
                 return (
                   <li
                     className="bg-[#000000b0]  flex space-x-3 p-4 mx-auto rounded-sm"
@@ -212,7 +183,14 @@ const Home: NextPage = () => {
                       <p>
                         by{" "}
                         <a href={"https://etherscan.io/address/" + e?.address}>
-                          {e?.address}
+                          {e?.address.length < 14
+                            ? e?.address
+                            : e?.address.slice(0, 5) +
+                              "..." +
+                              e?.address.slice(
+                                e.address.length - 4,
+                                e.address.length
+                              )}
                         </a>
                       </p>
                     </div>
