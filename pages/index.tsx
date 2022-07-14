@@ -179,7 +179,13 @@ const Home: NextPage = () => {
                       </div>
                     </div>
                     <div className="flex flex-col space-y-2 place-content-center">
-                      <h1 className="">Burnt 1 Day ago</h1>
+                      <h1 className="">
+                        {(Date.now() / 1000 - e?.timestamp) / 86400 <= 0
+                          ? "today"
+                          : Math.round(
+                              (Date.now() / 1000 - e?.timestamp) / 86400
+                            ) + " day(s) ago"}
+                      </h1>
                       <p>
                         by{" "}
                         <a href={"https://etherscan.io/address/" + e?.address}>
